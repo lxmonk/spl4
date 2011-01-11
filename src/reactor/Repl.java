@@ -31,12 +31,14 @@ public class Repl implements Runnable {
 	public void run() {
 		final Scanner sc = new Scanner(System.in);
 		String in = sc.next();
-		while (in != "print")
+		while (!in.equals("print")) {
 			in = sc.next();
-		if (in != "print") {
+		}
+		if (in.equals("print")) {
 			Stats.print();
 			stop=true;
 		}
+		return;
 	}
 
 }
