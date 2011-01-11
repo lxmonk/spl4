@@ -1,6 +1,5 @@
 package client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -10,10 +9,10 @@ import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.logging.Logger;
 
-import protocol.stomp.Message;
 import protocol.stomp.ConnectMsg;
-import protocol.stomp.SubscribeMsg;
+import protocol.stomp.Message;
 import protocol.stomp.SendMsg;
+import protocol.stomp.SubscribeMsg;
 
 public class StompStressAgent {
     private static final Logger _logger = Logger.getLogger("edu.spl.reactor.stomp.stress");

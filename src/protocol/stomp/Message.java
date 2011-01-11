@@ -1,7 +1,7 @@
 package protocol.stomp;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * (c)2005 Sean Russell

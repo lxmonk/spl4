@@ -1,8 +1,9 @@
 package protocol.stomp;
 
-import reactor.Sender;
-import protocol.AsyncServerProtocol;
 import java.util.logging.Logger;
+
+import protocol.AsyncServerProtocol;
+import reactor.Sender;
 
 /**
  * An implementation of the STOMP protocol

@@ -1,7 +1,7 @@
 package protocol.stomp;
 
-import protocol.ServerProtocolFactory;
 import protocol.AsyncServerProtocol;
+import protocol.ServerProtocolFactory;
 
 public class StompProtocolFactory implements ServerProtocolFactory {
     private Stomp state;

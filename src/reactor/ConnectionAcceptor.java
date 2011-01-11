@@ -1,11 +1,11 @@
 package reactor;
 
-import java.util.logging.Logger;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.logging.Logger;
 
 /**
  * Handles new client connections. An Acceptor is bound on a ServerSocketChannel

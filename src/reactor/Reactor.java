@@ -11,11 +11,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 
-import protocol.*;
-import tokenizer.*;
+import protocol.ServerProtocolFactory;
+import tokenizer.TokenizerFactory;
 
 /**
  * An implementation of the Reactor pattern.
@@ -115,7 +113,8 @@ public class Reactor implements Runnable {
             }
 
             // Get list of selection keys with pending events
-            Iterator it = selector.selectedKeys().iterator();
+            @SuppressWarnings("rawtypes")
+			Iterator it = selector.selectedKeys().iterator();
 
             // Process each key
             while (it.hasNext()) {

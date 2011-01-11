@@ -1,10 +1,10 @@
 package reactor;
 
-import java.util.concurrent.ExecutorService;
 import java.nio.channels.Selector;
+import java.util.concurrent.ExecutorService;
 
-import protocol.*;
-import tokenizer.*;
+import protocol.ServerProtocolFactory;
+import tokenizer.TokenizerFactory;
 
 /**
  * a simple data stucture that hold information about the reactor, including getter methods
