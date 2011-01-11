@@ -102,8 +102,10 @@ public class Reactor implements Runnable {
             logger.info("server channel seems to be closed!");
             return;
         }
-
-        while (_shouldRun && selector.isOpen()) {
+		Repl repl = new Repl();
+		Thread t1 = new Thread(repl);
+		t1.start();
+		while (_shouldRun && selector.isOpen() && repl.dontStop()) {
             // Wait for an event
             try {
                 selector.select();
