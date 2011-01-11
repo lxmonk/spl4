@@ -37,11 +37,12 @@ public class Stats {
 		System.out.println("Incoming messages: " + incomingMessages.toString());
 		System.out.println("Connection latency: "
 				+ connectionLatencyMs.toString() + " msec -- "
-				+ connectionLatencyMs.get() / (double) Math.max(1,connectionsNumber.get())
+				+ connectionLatencyMs.get()
+				/ (double) Math.max(1, connectionsNumber.get())
 				+ " msec per connection average");
 		System.out.println("Response latency: " + responseLatencyMs.toString()
 				+ " msec -- " + responseLatencyMs.get()
-				/ (double) Math.max(1,incomingMessages.get())
+				/ (double) Math.max(1, incomingMessages.get())
 				+ " msec per response average");
 		System.out.println("Read Fragmentation Level: "
 				+ readFragmentationCounter.get() / (float) readCounter.get());

@@ -21,8 +21,8 @@ import tokenizer.TokenizerFactory;
  * An implementation of the Reactor pattern.
  */
 public class Reactor implements Runnable {
-	private static final int _1000 = 
-	private static final int _32 = 
+	private static final int _1000 = 1000;
+	private static final int _32 = 32;
 	private static final Logger logger = Logger.getLogger("edu.spl.reactor");
 	private final int _port;
 	private final int _poolSize;
@@ -95,11 +95,8 @@ public class Reactor implements Runnable {
 			logger.info("cannot create the selector -- server socket is busy?");
 			return;
 		}
-		Stats stats = new Stats();
-		stats.connectionsNumber.addAndGet(3); //fixme: del
-		Stats.connectionsNumber.addAndGet(100);
 		_data = new ReactorData(executor, selector, _protocolFactory,
-				_tokenizerFactory);
+				_tokenizerFactory, stats);
 
 		_data = new ReactorData(executor, selector, _protocolFactory,
 				_tokenizerFactory, stats);
@@ -120,11 +117,6 @@ public class Reactor implements Runnable {
 		Thread t1 = new Thread(repl);
 		t1.start();
 		while (_shouldRun && selector.isOpen() && repl.dontStop()) {
-			// Wait for an event
-			try {
-				selector.select(_1000);
-
-		while (_shouldRun && selector.isOpen()) {
 			// Wait for an event
 			try {
 				selector.select();
