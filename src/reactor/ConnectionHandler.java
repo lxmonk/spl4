@@ -127,6 +127,8 @@ public class ConnectionHandler implements Sender {
 			// tell the protocol that the connection terminated.
 			_protocol.connectionTerminated();
 			return;
+		} else {
+			Stats.incomingBytes.addAndGet(numBytesRead);
 		}
 
 		// add the buffer to the protocol task
@@ -152,7 +154,12 @@ public class ConnectionHandler implements Sender {
 		ByteBuffer buf = _outData.remove(0);
 		if (buf.remaining() != 0) {
 			try {
-				_sChannel.write(buf);
+				int written = _sChannel.write(buf);
+				if (written != 0) { //some bytes were written
+				// add the number of bytes written to the counter
+				Stats.outgoingBytes.addAndGet(written);
+				Stats.writeCounter.incrementAndGet();
+				}
 			} catch (IOException e) {
 				// If client closed connection without reading
 				closeConnection();
@@ -163,6 +170,8 @@ public class ConnectionHandler implements Sender {
 			// check if the buffer contains more data
 			if (buf.remaining() != 0) {
 				_outData.add(0, buf);
+				// some bytes were not sent, increment writeFragmentationCounter
+				Stats.writeFragmentationCounter.incrementAndGet();
 			}
 		}
 		// check if the protocol indicated close.

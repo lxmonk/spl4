@@ -3,9 +3,11 @@ package reactor;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ClosedChannelException;
+import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,7 +21,8 @@ import tokenizer.TokenizerFactory;
  * An implementation of the Reactor pattern.
  */
 public class Reactor implements Runnable {
-	private static final int _1000 = 1000;
+	private static final int _1000 = 
+	private static final int _32 = 
 	private static final Logger logger = Logger.getLogger("edu.spl.reactor");
 	private final int _port;
 	private final int _poolSize;
@@ -82,6 +85,8 @@ public class Reactor implements Runnable {
 		ExecutorService executor = Executors.newFixedThreadPool(_poolSize);
 		Selector selector = null;
 		ServerSocketChannel ssChannel = null;
+		// create the Stats object
+		Stats stats = new Stats();
 
 		try {
 			selector = Selector.open();
@@ -95,6 +100,9 @@ public class Reactor implements Runnable {
 		Stats.connectionsNumber.addAndGet(100);
 		_data = new ReactorData(executor, selector, _protocolFactory,
 				_tokenizerFactory);
+
+		_data = new ReactorData(executor, selector, _protocolFactory,
+				_tokenizerFactory, stats);
 		ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor(
 				ssChannel, _data);
 
@@ -115,6 +123,11 @@ public class Reactor implements Runnable {
 			// Wait for an event
 			try {
 				selector.select(_1000);
+
+		while (_shouldRun && selector.isOpen()) {
+			// Wait for an event
+			try {
+				selector.select();
 			} catch (IOException e) {
 				logger.info("trouble with selector: " + e.getMessage());
 				continue;
@@ -135,6 +148,7 @@ public class Reactor implements Runnable {
 
 				// Check if it's a connection request
 				if (selKey.isValid() && selKey.isAcceptable()) {
+					long start = System.currentTimeMillis();
 					ConnectionAcceptor acceptor = (ConnectionAcceptor) selKey
 							.attachment();
 					try {
@@ -143,6 +157,9 @@ public class Reactor implements Runnable {
 						logger.info("problem accepting a new connection: "
 								+ e.getMessage());
 					}
+					long end = System.currentTimeMillis();
+					long delta = end - start;
+					Stats.connectionLatencyMs.addAndGet(delta);
 					continue;
 				}
 				// Check if a message has been sent
