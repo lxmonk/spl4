@@ -52,6 +52,8 @@ public class ConnectionAcceptor {
         if (sChannel != null) {
             SocketAddress address = sChannel.socket().getRemoteSocketAddress();
             logger.info("Accepting connection from " + address);
+            // increment the connections number by 1
+            Stats.connectionsNumber.incrementAndGet();
             sChannel.configureBlocking(false);
             SelectionKey key = sChannel.register(_data.getSelector(), 0);
 

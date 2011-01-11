@@ -15,6 +15,7 @@ public class ReactorData {
     private final Selector _selector;
     private final ServerProtocolFactory _protocolMaker;
     private final TokenizerFactory _tokenizerMaker;
+    private final Stats _stats;
 
     /**
      * Accessor.
@@ -38,12 +39,15 @@ public class ReactorData {
      * @param selector to multiplex events from all incoming channels
      * @param protocol factory to create specific protocol handlers for each connection
      * @param tokenizer factory to create specific tokenizers for each connection
+     * @param stats of this server
      */
-    public ReactorData(ExecutorService executor, Selector selector, ServerProtocolFactory protocol, TokenizerFactory tokenizer) {
+	public ReactorData(ExecutorService executor, Selector selector, 
+			ServerProtocolFactory protocol, TokenizerFactory tokenizer, Stats stats) {
         this._executor = executor;
         this._selector = selector;
         this._protocolMaker = protocol;
         this._tokenizerMaker = tokenizer;
+        this._stats = stats;
     }
 
     /**
@@ -60,5 +64,13 @@ public class ReactorData {
      */
     public TokenizerFactory getTokenizerMaker() {
         return _tokenizerMaker;
+    }
+    
+    /**
+     * return the {@link Stats} object of this server
+     * @return the {@link Stats} object of this server
+     */
+    public Stats getStats() {
+    	return _stats;
     }
 }
