@@ -3,6 +3,7 @@ package reactor;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ClosedChannelException;
+import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -19,7 +20,8 @@ import tokenizer.TokenizerFactory;
  * An implementation of the Reactor pattern.
  */
 public class Reactor implements Runnable {
-    private static final Logger logger = Logger.getLogger("edu.spl.reactor");
+    private static final int _32 = 32;
+	private static final Logger logger = Logger.getLogger("edu.spl.reactor");
     private final int _port;
     private final int _poolSize;
     private final ServerProtocolFactory _protocolFactory;
@@ -90,6 +92,8 @@ public class Reactor implements Runnable {
             return;
         }
 
+
+
         _data = new ReactorData(executor, selector, _protocolFactory, _tokenizerFactory);
         ConnectionAcceptor connectionAcceptor = new ConnectionAcceptor( ssChannel, _data);
 
@@ -101,6 +105,16 @@ public class Reactor implements Runnable {
         } catch (ClosedChannelException e) {
             logger.info("server channel seems to be closed!");
             return;
+        }
+        SystemInPipe stdinPipe;
+        try {
+        	stdinPipe = new SystemInPipe();
+        	SelectableChannel stdin = stdinPipe.getStdinChannel();
+        	stdin.register (selector, SelectionKey.OP_READ);
+        	stdinPipe.start();
+        } catch (IOException e1) {
+        	logger.info("cannot listen on System.in.");
+        	
         }
 
         while (_shouldRun && selector.isOpen()) {
