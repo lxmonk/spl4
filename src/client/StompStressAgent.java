@@ -20,7 +20,8 @@ public class StompStressAgent {
     private final Charset _charset;
     private StressData _data;
     private OutputStreamWriter _osw;
-    private MessageTokenizer _tok;
+    @SuppressWarnings("unused")
+	private MessageTokenizer _tok;
 
     /**
      * Prepare an agent to create a single connection that produces stress on a Stomp server.
@@ -59,7 +60,7 @@ public class StompStressAgent {
      * @throws IOException when stream is closed.
      */
     private void send(OutputStreamWriter osw, Message m) throws IOException {
-        this._logger.info("Stomp: " + m.toString());
+        StompStressAgent._logger.info("Stomp: " + m.toString());
         osw.write(m.toString() + '\0');
         osw.flush();
     }
@@ -125,9 +126,9 @@ public class StompStressAgent {
         }
     }
 
-    private class Reader implements Runnable {
+    @SuppressWarnings("unused")
+	private class Reader implements Runnable {
         public void run() {
-            // @todo
         }
     }
 }

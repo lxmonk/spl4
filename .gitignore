@@ -2,3 +2,6 @@
 *.class
 # And the bin directory
 bin/
+# Ignore pmd and its reports
+reports/
+*.pmd

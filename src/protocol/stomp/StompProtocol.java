@@ -1,7 +1,5 @@
 package protocol.stomp;
 
-import java.util.logging.Logger;
-
 import protocol.AsyncServerProtocol;
 import reactor.Sender;
 
@@ -9,7 +7,6 @@ import reactor.Sender;
  * An implementation of the STOMP protocol
  */
 public class StompProtocol implements AsyncServerProtocol {
-    private static final Logger logger = Logger.getLogger("edu.spl.reactor.stomp");
     private boolean _shouldClose = false;
     private boolean _connectionTerminated = false;
     private Stomp _state;

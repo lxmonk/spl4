@@ -3,11 +3,9 @@ package reactor;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ClosedChannelException;
-import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,7 +20,6 @@ import tokenizer.TokenizerFactory;
  */
 public class Reactor implements Runnable {
 	private static final int _1000 = 1000;
-	private static final int _32 = 32;
 	private static final Logger logger = Logger.getLogger("edu.spl.reactor");
 	private final int _port;
 	private final int _poolSize;
@@ -119,7 +116,7 @@ public class Reactor implements Runnable {
 		while (_shouldRun && selector.isOpen() && repl.dontStop()) {
 			// Wait for an event
 			try {
-				selector.select();
+				selector.select(_1000);
 			} catch (IOException e) {
 				logger.info("trouble with selector: " + e.getMessage());
 				continue;
